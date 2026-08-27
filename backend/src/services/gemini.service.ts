@@ -159,6 +159,14 @@ export class GeminiService implements GeminiServiceContract {
       }
 
       const status = getGeminiStatus(error);
+      if (status === 429) {
+        throw new AppError(
+          "GEMINI_RATE_LIMITED",
+          "Gemini API rate limit or quota was reached. Please try again later.",
+          429,
+        );
+      }
+
       const statusCode = status && status >= 500 ? 503 : 502;
       throw new AppError("GEMINI_UNAVAILABLE", "Gemini API is unavailable. Please try again later.", statusCode);
     } finally {

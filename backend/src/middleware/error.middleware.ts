@@ -40,6 +40,7 @@ export const notFoundHandler = (_req: Request, _res: Response, next: NextFunctio
 };
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  const isUnexpectedError = !(err instanceof AppError) && !(err instanceof multer.MulterError) && !(err instanceof ZodError);
   const appError =
     err instanceof AppError
       ? err
@@ -49,8 +50,14 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
           ? getZodError(err)
           : new AppError("INTERNAL_SERVER_ERROR", "An unexpected error occurred.", 500);
 
-  if (env.NODE_ENV !== "test" && appError.statusCode >= 500) {
-    console.error(`${appError.code}: ${appError.message}`);
+  const shouldLog = appError.statusCode >= 500 || appError.code === "GEMINI_RATE_LIMITED";
+
+  if (env.NODE_ENV !== "test" && shouldLog) {
+    if (isUnexpectedError && err instanceof Error) {
+      console.error(`${appError.code}: ${err.name}: ${err.message}\n${err.stack ?? ""}`);
+    } else {
+      console.error(`${appError.code}: ${appError.message}`);
+    }
   }
 
   res.status(appError.statusCode).json({
