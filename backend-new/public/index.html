@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HireLens Scanner</title>
+    <style>
+      body { font-family: system-ui, sans-serif; background: #f5f7fb; color: #182033; margin: 0; }
+      main { max-width: 720px; margin: 48px auto; padding: 32px; background: white; border-radius: 12px; box-shadow: 0 8px 30px #18203318; }
+      label, input, button { display: block; width: 100%; box-sizing: border-box; }
+      label { font-weight: 650; margin-top: 20px; }
+      input { margin-top: 8px; padding: 10px; }
+      button { margin-top: 24px; padding: 12px; border: 0; border-radius: 8px; background: #275df5; color: white; font-weight: 700; cursor: pointer; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #101828; color: #eef2ff; padding: 16px; border-radius: 8px; min-height: 48px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Job Scanner</h1>
+      <p>Upload a PDF resume and a link to the job posting.</p>
+      <form id="scannerForm">
+        <label>Job posting URL<input name="jobUrl" type="url" required placeholder="https://company.example/jobs/role" /></label>
+        <label>Resume PDF<input name="resume" type="file" accept="application/pdf,.pdf" required /></label>
+        <button type="submit">Analyze</button>
+      </form>
+      <pre id="result">Ready.</pre>
+    </main>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
